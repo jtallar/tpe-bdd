@@ -11,8 +11,16 @@ exports.findUserById = async function (collection, id, proj) {
     return result;
 }
 
+exports.findManyUsersById = async function (collection, ids, proj) {
+    const result = await collection.find({ _id: { $in: ids }}, { projection: proj }).toArray();
+    if (!result) {
+        console.log(id + " Not found");
+    }
+    return result;
+}
+
 exports.checkUserIdExists = async function (collection, id) {
-    const result = await collection.findOne({ _id: id});
+    const result = await collection.findOne({ _id: id}, { projection: { _id: 1 } });
     if (result) {
         return true;
     }
@@ -34,18 +42,18 @@ exports.insertOneUser = async function (collection, user) {
 }
 
 exports.insertManyUsers = async function (collection, users) {
-    for (user of users) {
-        const exists = await exports.checkUserIdExists(collection, user._id);
-        if (exists) {
-            console.log("ERROR, _id " + user._id + " already exists");
-            return;
-        }
+    const ids = users.map(user => user._id);
+    const exists = await exports.findManyUsersById(collection, ids, { _id: 1 });
+    if (exists.length != 0) {
+        console.log("ERROR, the following ids already exist: " + JSON.stringify(exists));
+        return;
     }
+
     const result = await collection.insertMany(users);
-    if (result.result.ok) {
-        console.log("OK, inserted");
+    if (result.result.ok && users.length == result.result.n) {
+        console.log("OK, inserted " + JSON.stringify(result.insertedIds));
     } else {
-        console.log("ERROR, not inserted");
+        console.log("ERROR, only inserted " + JSON.stringify(result.insertedIds));
     }
 }
 
