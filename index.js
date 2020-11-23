@@ -36,6 +36,12 @@ var user3 = objectFunctions.newUserJson("person-id-16", "Jota Te",
 // runMongo(mongoFun.testParams, "person-id-3", {_id: 1}).catch(console.dir);
 // runMongo(mongoFun.rateUser, objectFunctions.newRatingJson(4, "person-id-4", "person-id-3", -73, 40)).catch(console.dir);
 
-runMongo(mongoFun.insertManyUsers, [user1, user2, user3]).catch(console.dir);
+// runMongo(mongoFun.insertManyUsers, [user1, user2, user3]).catch(console.dir);
 
 // runMongo(mongoFun.findManyUsersById, ["person-id-31", "person-id-1"]).catch(console.dir);
+
+var rating1 = objectFunctions.newRatingJson(4, "person-id-4", "person-id-5", -73, 40);
+var rating2 = objectFunctions.newRatingJson(4, "person-id-4", "person-id-6", -73, 40);
+var rating3 = objectFunctions.newRatingJson(4, "person-id-4", "person-id-7", -73, 40);
+
+runMongo(mongoFun.rateManyUsers, [rating1, rating2, rating3]).catch(console.dir);

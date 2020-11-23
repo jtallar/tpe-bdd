@@ -63,13 +63,54 @@ exports.countAll = async function (collection) {
 }
 
 exports.rateUser = async function (collection, ratingJson) {
+    if(ratingJson.from == ratingJson.to) {
+        console.log("ERROR, cannot rate yourself");
+        return;
+    }
+
     var fromUser = await exports.findUserById(collection, ratingJson.from, {_id:1, rating: 1});
     var toUser = await exports.findUserById(collection, ratingJson.to, {_id:1, rating: 1});
-    if (!fromUser || !toUser) return;
+    if (!fromUser || !toUser) {
+        console.log("ERROR, one of the users does not exist");
+        return;
+    }
     delete ratingJson.to;
     
     const newRating = Math.round(toUser.rating + (ratingJson.score * 1000 - toUser.rating) * ((fromUser.rating / 1000) ** (1.5)) / 100);
     const result = await collection.updateOne({ _id: toUser._id }, { $push: { ratings: ratingJson }, $set : { rating: newRating} });
+    if (result.result.ok) {
+        console.log("OK, rated");
+    } else {
+        console.log("ERROR, not rated");
+    }
+}
+
+exports.rateManyUsers = async function (collection, ratingArray) {
+    var newRating, fromUser, toUser;
+    var bulkUpdateOps = [];
+    for (ratingJson of ratingArray) {
+        if(ratingJson.from == ratingJson.to) {
+            console.log("ERROR, cannot rate yourself");
+            return;
+        }
+
+        fromUser = await exports.findUserById(collection, ratingJson.from, {_id:1, rating: 1});
+        toUser = await exports.findUserById(collection, ratingJson.to, {_id:1, rating: 1});
+        if (!fromUser || !toUser) {
+            console.log("ERROR, one of the users does not exist");
+            return;
+        }
+        delete ratingJson.to;
+        newRating = Math.round(toUser.rating + (ratingJson.score * 1000 - toUser.rating) * ((fromUser.rating / 1000) ** (1.5)) / 100);
+        bulkUpdateOps.push({ 
+            "updateOne": {
+                "filter": { _id: toUser._id },
+                "update": { $push: { ratings: ratingJson }, $set : { rating: newRating} }
+            }
+        })
+    }    
+
+    const result = await collection.bulkWrite(bulkUpdateOps);
     if (result.result.ok) {
         console.log("OK, rated");
     } else {
