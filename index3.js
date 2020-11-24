@@ -1,16 +1,32 @@
 const redis = require("redis");
 const redisFun = require('./redisGeoQueries');
 
-const redisClient = redis.createClient(6376);
+const redisClient = redis.createClient(6376, {
+    retry_strategy: (options) => {
+        const {error, total_retry_time, attempt} = options;
+        if (error && error.code === "ECONNREFUSED") {
+            console.log(error.code); // take actions or throw exception
+        }
+        if (total_retry_time > 1000 * 15) { //in ms i.e. 15 sec
+            console.log('Retry time exhausted'); // take actions or throw exception
+        }
+        if (options.attempt > 10) {
+            console.log('10 attempts done'); // take actions or throw exception
+        }
+        console.log("Attempting connection");
+        // reconnect after
+        return Math.min(options.attempt * 100, 3000); //in ms
+    }
+});
 
 async function runRedis(queryFunction, ...params) {
     try {
-        await redisClient.on('connect', () => {
-                console.log('✅ Redis connected!')})
-        await redisClient.on('error', function(error) {
-            console.error(`❗️ Redis Error: ${error}`)})    
-        // redisClient.on('ready', () => {
-        //     console.log('✅ Redis ready!')})
+        // redisClient.on('connect', () => {
+        //     console.log('✅ Redis connected!')})
+        redisClient.on('error', function(error) {
+            console.error(`❗️ Redis Error: ${error}`)})   
+        redisClient.on('ready', () => {
+            console.log('✅ Redis ready!')})
         // Call query function with params
         await queryFunction(redisClient, ...params);
     } finally {
