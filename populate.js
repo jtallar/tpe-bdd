@@ -4,15 +4,54 @@ const mongoFun = require('./mongoQueries');
 const objectFun = require('./objects');
 const utilsFun = require('./utils');
 
+const redis = require("redis");
+const redisFun = require('./redisGeoQueries');
+const randomLocation = require('random-location');
+
 const csv = require('csv-parser');
 const fs = require('fs');
 const randomWords = require('random-words');
 
-// Setup MongoDB connection
-const uri = "mongodb://localhost:27017";
-const mClient = new MongoClient(uri, { useUnifiedTopology: true });
+function trackLineCount() {
+    if (++processedLines % 1000 === 0) {
+        console.log(`Lines Processed: ${processedLines}`);
+    }
+}
 
-async function populateMongo(users, shouldDrop, rateCount) {
+async function populateRedis(users, flush, point, radius) {
+    try {
+        redisClient.on('connect', () => {
+            console.log('✅ Redis connected!')
+        })
+        .on('error', function(error) {
+            console.error(`❗️ Redis Error: ${error}`)})   
+        .on('ready', function() {
+            console.log('✅ Redis ready!')
+        })
+
+        // Drop all geo if requested
+        if (flush) {
+            try {
+                redisClient.flushall((err, success) => {
+                    if (err) console.log('  ❗️ '+ err)
+                    else console.log(success);
+                });
+            } catch (err) {
+                console.log('Nothing to drop');
+            }
+        }
+
+        // Insert users into geo
+        for (var i = 0; i < users.length; i++) {
+            const randomPoint = randomLocation.randomCirclePoint(point, radius);
+            await redisFun.geoAddOne(redisClient, "people", randomPoint.longitude, randomPoint.latitude, users[i]._id);
+        }
+    } finally {
+        redisClient.quit();     // Ensures that the client will close when you finish/error
+    }
+}
+
+async function populateMongo(users, shouldDrop, rateCount, point, radius) {
     try {
         await mClient.connect();
         const database = mClient.db('nosedive');
@@ -36,8 +75,8 @@ async function populateMongo(users, shouldDrop, rateCount) {
             if (index1 == index0) index1 = (index1 + 1) % users.length;
             var score = utilsFun.randomBetween(1, 6); // Rating [1,5]
 
-            // TODO: Generate random locations
-            var rating = objectFun.newRatingJson(score, users[index0]._id, users[index1]._id, 0, 0);
+            const randomPoint = randomLocation.randomCirclePoint(point, radius);
+            var rating = objectFun.newRatingJson(score, users[index0]._id, users[index1]._id, randomPoint.latitude, randomPoint.longitude);
             await mongoFun.rateUser(collection, rating);
         }
 
@@ -55,8 +94,8 @@ var streamOptions = csv({
 
 // Recibir el nombre por parametro
 var myArgs = process.argv.slice(2); // Elimino node y fileName
-if (myArgs.length < 3) {
-    console.log('Please run with `node populateMongo.js file.csv linesToProcess rateCount [DROP]`');
+if (myArgs.length < 4) {
+    console.log('Please run with `node populate.js file.csv linesToProcess rateCount redisPort [DROP]`');
     return;
 }
 // const csvFilename = 'babyNamesUSYOB-full.csv';
@@ -74,18 +113,31 @@ if (isNaN(rateCount) || rateCount < 0) {
     return;
 }
 
+var redisPort = parseInt(myArgs[3]);
+if (isNaN(redisPort) || redisPort <= 0) {
+    console.log('redisPort must be a number greater than 0');
+    return;
+}
+
 var shouldDrop = false;
-if (myArgs[3] === 'DROP') {
+if (myArgs[4] === 'DROP') {
     shouldDrop = true;
 }
 
+// Setup MongoDB connection
+const uri = "mongodb://localhost:27017";
+const mClient = new MongoClient(uri, { useUnifiedTopology: true });
+
+// Setup Redis connection
+const redisClient = redis.createClient(redisPort);
+
 var processedLines = 0;
 
-function trackLineCount() {
-    if (++processedLines % 1000 === 0) {
-        console.log(`Lines Processed: ${processedLines}`);
-    }
+const centerPoint = {
+    latitude: -34.60252364016448,
+    longitude: -58.36740569629624
 }
+const radius = 500000;
 
 var users = [];
 var stream = fs.createReadStream(csvFilename);
@@ -109,5 +161,7 @@ var stream = fs.createReadStream(csvFilename);
         console.log(`Total lines processed: ${processedLines}`);
 
         // Connect to MongoDB and insert users in MongoDB
-        populateMongo(users, shouldDrop, rateCount);
+        populateMongo(users, shouldDrop, rateCount, centerPoint, radius);
+        // Connect to Redis and insert random locations for each user
+        populateRedis(users, shouldDrop, centerPoint, radius);
     });

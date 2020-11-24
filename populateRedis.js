@@ -7,12 +7,14 @@ const redisClient = redis.createClient(6376);
 
 async function populateRedis(flush, cant, point, radius) {
     try {
-        // redisClient.on('connect', () => {
-        //     console.log('✅ Redis connected!')});
-        redisClient.on('ready', () => {
-            console.log('✅ Redis ready!')});
-        redisClient.on('error', function(error) {
-            console.error(`❗️ Redis Error: ${error}`)});
+        redisClient.on('connect', () => {
+            console.log('✅ Redis connected!')
+        })
+        .on('error', function(error) {
+            console.error(`❗️ Redis Error: ${error}`)})   
+        .on('ready', function() {
+            console.log('✅ Redis ready!')
+        })
 
         // Drop all geo if requested
         if (flush) {

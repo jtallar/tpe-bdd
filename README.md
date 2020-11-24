@@ -11,15 +11,16 @@
 - npm install random-location
 
 # Populate MongoDB
-`node populate.js file.csv linesToProcess rateCount [DROP]`
+`node populate.js file.csv linesToProcess rateCount redisPort [DROP]`
 
 Where 
 - `file.csv` is a csv file with headers YearOfBirth,Name,Sex,Number 
 - `linesToProcess` is a number (> 0) to set maxLines to process
 - `rateCount` is a number (>= 0) to set the number of rates to generate between added users
+- `redisPort` is a number (> 0) that indicates the port where redis locations is running
 - `[DROP]` indicates if the collection should be dropped before inserting.
 
-Eg: `node populateMongo.js babyNamesUSYOB-full.csv 10 20 DROP`
+Eg: `node populate.js babyNamesUSYOB-full.csv 10 20 6379 DROP`
 
 # Rate a user
 `node ratePerson.js score from-id to-id [lat lon]`
