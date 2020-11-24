@@ -56,7 +56,7 @@ var streamOptions = csv({
 // Recibir el nombre por parametro
 var myArgs = process.argv.slice(2); // Elimino node y fileName
 if (myArgs.length < 3) {
-    console.log('Please run with `node populate.js file.csv linesToProcess rateCount [DROP]`');
+    console.log('Please run with `node populateMongo.js file.csv linesToProcess rateCount [DROP]`');
     return;
 }
 // const csvFilename = 'babyNamesUSYOB-full.csv';
