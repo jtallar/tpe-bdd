@@ -7,6 +7,8 @@
 - npm install csv-parser
 - npm install fs
 - npm install random-words
+- npm install redis
+- npm install random-location
 
 # Populate MongoDB
 `node populate.js file.csv linesToProcess rateCount [DROP]`

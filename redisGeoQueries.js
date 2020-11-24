@@ -1,6 +1,6 @@
 exports.geoAddOne = async function (client, key, long, lat, id) {
     const result = client.geoadd(key, long, lat, id, (err, value) => {
-        // console.log(value + ' inserted');
+        console.log(value + ' inserted');
     });
     return result;
 }
