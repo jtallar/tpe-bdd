@@ -16,7 +16,7 @@ exports.geoAddMany = async function (client, users) {
 
 exports.geoRadiusBM = async function (client, key, id, radius, unit) {
     const result = client.georadiusbymember(key, id, radius, unit, (err, value)=>{
-        console.log('Within radius: ' + value);
+        console.log('Within radius of '+radius+unit+': ' + value);
     });
     return result;
 }
