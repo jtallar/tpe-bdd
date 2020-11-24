@@ -44,4 +44,5 @@ var rating1 = objectFunctions.newRatingJson(4, "person-id-4", "person-id-5", -73
 var rating2 = objectFunctions.newRatingJson(4, "person-id-4", "person-id-6", -73, 40);
 var rating3 = objectFunctions.newRatingJson(4, "person-id-4", "person-id-7", -73, 40);
 
-runMongo(mongoFun.rateManyUsers, [rating1, rating2, rating3]).catch(console.dir);
+// runMongo(mongoFun.rateManyUsers, [rating1, rating2, rating3]).catch(console.dir);
+runMongo(mongoFun.dropAll).catch(console.dir);

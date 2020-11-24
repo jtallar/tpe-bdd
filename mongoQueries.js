@@ -3,6 +3,14 @@ exports.findOneUser = async function (collection) {
     console.log(result);
 }
 
+exports.dropAll = async function (collection) {
+    const result = await collection.drop();
+    if (result) {
+        console.log("Dropped all documents from collection");
+    }
+    return result;
+}
+
 exports.findUserById = async function (collection, id, proj) {
     const result = await collection.findOne({ _id: id}, { projection: proj });
     if (!result) {
