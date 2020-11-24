@@ -85,6 +85,8 @@ exports.rateUser = async function (collection, ratingJson) {
     }
 }
 
+// No se si tiene mucho sentido, si la usas los ratings se hacen sin afectarse entre si.
+// Eg: si pongo que p3-->p4 y p4-->p3, en este ultimo toma el rating anterior de p4, previo al rate de p3 a p4
 exports.rateManyUsers = async function (collection, ratingArray) {
     var newRating, fromUser, toUser;
     var bulkUpdateOps = [];
