@@ -2,16 +2,18 @@ const objectFunctions = require('./objects');
 const redis= require("redis");
 const redisFun = require('./redisQueries');
 
-const redisClient = redis.createClient(6379);
-
+const redisClient = redis.createClient(6377);
+redisClient.on('connect', () => { 
+    console.log('✅ Redis connected!')
+})
 async function runRedis(queryFunction, ...params) {
     try {
         redisClient.on('error', function(error) {
             console.error(`❗️ Redis Error: ${error}`)})
         // redisClient.on('ready', () => {
         //     console.log('✅ Redis ready!')})
-        redisClient.on('connect', () => {
-            console.log('✅ Redis connected!')})
+        // redisClient.on('connect', () => {
+        //     console.log('✅ Redis connected!')})
 
         // Call query function with params
         await queryFunction(redisClient, ...params);

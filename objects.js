@@ -24,3 +24,7 @@ exports.newRatingJson = function (scoreInt, fromId, toId, lat, lon) {
         }
     }
 }
+
+exports.locations = {
+    
+  }
