@@ -3,13 +3,11 @@ const redisFun = require('./redisGeoQueries');
 
 const redisClient = redis.createClient(6376);
 
-
-
 async function runRedis(queryFunction, ...params) {
     try {
-        redisClient.on('connect', () => {
+        await redisClient.on('connect', () => {
                 console.log('✅ Redis connected!')})
-        redisClient.on('error', function(error) {
+        await redisClient.on('error', function(error) {
             console.error(`❗️ Redis Error: ${error}`)})    
         // redisClient.on('ready', () => {
         //     console.log('✅ Redis ready!')})
