@@ -1,12 +1,12 @@
 const { MongoClient } = require("mongodb");
 
-const mongoFun = require('./mongoQueries');
-const objectFun = require('./objects');
-const utilsFun = require('./utils');
+const mongoFun = require('./utils/mongoQueries');
+const objectFun = require('./utils/objects');
+const utilsFun = require('./utils/utils');
 
 const redis = require("redis");
-const redisFun = require('./redisGeoQueries');
 const randomLocation = require('random-location');
+const redisFun = require('./utils/redisGeoQueries');
 
 const csv = require('csv-parser');
 const fs = require('fs');

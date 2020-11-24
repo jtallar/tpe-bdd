@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 
-const mongoFun = require('./mongoQueries');
-const objectFun = require('./objects');
+const mongoFun = require('./utils/mongoQueries');
+const objectFun = require('./utils/objects');
 
 // Setup MongoDB connection
 const uri = "mongodb://localhost:27017";

@@ -1,6 +1,6 @@
 
 const redis = require("redis");
-const redisFun = require('./redisGeoQueries');
+const redisFun = require('../utils/redisGeoQueries');
 const randomLocation = require('random-location');
 
 const redisClient = redis.createClient(6376);
