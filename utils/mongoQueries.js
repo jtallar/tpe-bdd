@@ -14,7 +14,7 @@ exports.dropAll = async function (collection) {
 exports.findUserById = async function (collection, id, proj) {
     const result = await collection.findOne({ _id: id}, { projection: proj });
     if (!result) {
-        console.log(id + " Not found");
+        // console.log(id + " Not found");
     }
     return result;
 }
@@ -54,6 +54,7 @@ exports.insertOneUser = async function (collection, user) {
 exports.insertManyUsers = async function (collection, users) {
     const ids = users.map(user => user._id);
     const exists = await exports.findManyUsersById(collection, ids, { _id: 1 });
+    // TODO: En vez de fallar, eliminar de users los repetidos
     if (exists.length != 0) {
         console.log("ERROR, the following ids already exist: " + JSON.stringify(exists));
         return;
@@ -89,7 +90,7 @@ exports.rateUser = async function (collection, ratingJson) {
     const newRating = Math.round(toUser.rating + (ratingJson.score * 1000 - toUser.rating) * ((fromUser.rating / 1000) ** (1.5)) / 100);
     const result = await collection.updateOne({ _id: toUser._id }, { $push: { ratings: ratingJson }, $set : { rating: newRating} });
     if (result.result.ok) {
-        console.log("OK, rated");
+        // console.log("OK, rated");
     } else {
         console.log("ERROR, not rated");
     }

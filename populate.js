@@ -66,9 +66,17 @@ async function populateMongo(users, shouldDrop, rateCount, point, radius) {
             }
         }
         // Insert users into collection
-        await mongoFun.insertManyUsers(collection, users);
-        // Generate rateCount random ratings
         var i;
+        
+        // for (i = 0; i < users.length / 100000; i++) {
+        //     var chunk = users.slice(i * 100000, (i + 1) * 100000);
+        //     await mongoFun.insertManyUsers(collection, chunk);
+        //     console.log('Inserted 100.000 in MongoDB');
+        // }
+
+        await mongoFun.insertManyUsers(collection, users);
+
+        // Generate rateCount random ratings
         for (i = 0; i < rateCount; i++) {
             var index0 = utilsFun.randomBetween(0, users.length);
             var index1 = utilsFun.randomBetween(0, users.length);

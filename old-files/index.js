@@ -8,7 +8,6 @@ const uri = "mongodb://localhost:27017";
 const mClient = new MongoClient(uri, { useUnifiedTopology: true });
 
 
-// TODO: Ver como hacer para correr multiples queries, con esto es de a una
 async function runMongo(queryFunction, ...params) {
     try {
         await mClient.connect();
