@@ -21,7 +21,12 @@ async function geoRadiusRedis(id, radius) {
             console.error(` ❗️ Redis Error: ${error}`);})
         // redisGeo.on('ready', () => {
         //     console.log('✅ Redis ready!')})
-        ret = await redisGeoFun.geoRadiusBM(redisGeo, 'people', id, radius, 'm');
+        try {
+            ret = await redisGeoFun.geoRadiusBM(redisGeo, 'people', id, radius, 'm');
+        } catch (err) {
+            if(!ret) redisCache.quit();
+            // console.log(' ❗️ No user named ' + id)
+        }
     } finally {
         redisGeo.quit();
     }
@@ -83,11 +88,11 @@ const redisCache = redis.createClient(cachePort);   // 6379
 
 async function getCloseIds(id, radius){
     var close = await geoRadiusRedis(id, radius);
-    console.log('Close people ->  ' +close)
     if(close){
+        console.log('Close people ->  ' +close)
         await fillCacheRedis(await findUsersMongo(close))
     }
-    else console.log(' ❗️ Error getting close ids')
+    else console.log(' ❗️ No user named '+id)
 }
 
 getCloseIds(id, radius);

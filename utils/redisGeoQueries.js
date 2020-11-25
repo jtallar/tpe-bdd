@@ -10,7 +10,6 @@ exports.geoRadiusBM = async function (client, key, id, radius, unit) {
     const { promisify } = require("util");
     const getAsync = promisify(client.georadiusbymember).bind(client);
     const result = await getAsync(key, id, radius, unit);
-    // console.log(result)
     return result;
 }
 // runRedis(redisFun.geoRadiusBM, "people", "cvuoso", 1, 'km');
