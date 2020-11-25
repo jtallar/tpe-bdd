@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
-const objectFunctions = require('./utils/objects');
-const mongoFun = require('./utils/mongoQueries');
-const mongoAnalFun = require('./utils/mongoAnalyticsQueries');
+const objectFunctions = require('../utils/objects');
+const mongoFun = require('../utils/mongoQueries');
+const mongoAnalFun = require('../utils/mongoAnalyticsQueries');
 
 const uri = "mongodb://localhost:27017";
 

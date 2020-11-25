@@ -1,5 +1,5 @@
 const redis= require("redis");
-const redisFun = require('./utils/redisQueries');
+const redisFun = require('../utils/redisQueries');
 
 const redisClient = redis.createClient(6379);
 

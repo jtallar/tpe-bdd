@@ -47,6 +47,35 @@ Where
 
 Eg: `node newUser.js 6379 jtallar 'Jota Te' 'Calle Falsa' '1998-02-15' M`
 
+# Get Nearby People
+`node closePeople.js id radius [geoport] [cacheport]`
+
+Where
+- `id` is a string with the new user's id, that cannot exist
+- `radius` is a number (> 0) that indicates in meters de radius of matching 
+- `geoPort` is number (> 0) that indicates the port where redis locations is running
+- `cachePort` is number (> 0) that indicates the port where redis cache is running
+
+You can run with both ports or without none of them
+In that case, defaults are 6378 and 6379 respectively
+Eg: `node closePeople.js house12 50000 6377 6376` or
+    `node closePeople.js house12 50000`
+
+# Get Cached People Data
+`node cachedPeople.js id full|name|rating [port]`
+
+Where
+- `id` is a string with the new user's id, that cannot exist
+- `full|name|rating` are the visualizing options 
+    - full: name and rating
+    - name: only name
+    - rating: only rating
+- `port` is number (> 0) that indicates the port where redis cache is running
+
+Port argument is optional. Default is 6379.
+Eg: `node cachedPeople.js house12 rating 6379` or
+    `node cachedPeople.js house12 rating`
+
 # MongoDB Analytics
 `node analytics.js option-name [option-params]`
 
