@@ -1,6 +1,7 @@
 const { MongoClient } = require("mongodb");
 const objectFunctions = require('./utils/objects');
 const mongoFun = require('./utils/mongoQueries');
+const mongoAnalFun = require('./utils/mongoAnalyticsQueries');
 
 const uri = "mongodb://localhost:27017";
 
@@ -45,4 +46,5 @@ var rating2 = objectFunctions.newRatingJson(4, "person-id-4", "person-id-6", -73
 var rating3 = objectFunctions.newRatingJson(4, "person-id-4", "person-id-7", -73, 40);
 
 // runMongo(mongoFun.rateManyUsers, [rating1, rating2, rating3]).catch(console.dir);
-runMongo(mongoFun.dropAll).catch(console.dir);
+// runMongo(mongoFun.dropAll).catch(console.dir);
+runMongo(mongoAnalFun.bestUsers, 5)

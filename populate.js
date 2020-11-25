@@ -149,7 +149,7 @@ var stream = fs.createReadStream(csvFilename);
             genre = data['Sex'];
         
             var userJson = objectFun.newUserJson(randomWords(1) + processedLines, name, 'Calle Falsa ' + processedLines,
-            Date.UTC(year, 1, 15), genre, "link.to.image");
+            new Date(year + '-01-15T00:00'), genre, "link.to.image");
             users.push(userJson);
 
             trackLineCount();
