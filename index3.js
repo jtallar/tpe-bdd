@@ -1,7 +1,7 @@
 const redis = require("redis");
 const redisFun = require('./utils/redisGeoQueries');
 
-const redisClient = redis.createClient(6376);
+const redisClient = redis.createClient(6378);
 
 async function runRedis(queryFunction, ...params) {
     try {
