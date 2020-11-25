@@ -10,7 +10,7 @@
 - npm install redis
 - npm install random-location
 
-# Populate MongoDB
+# Populate MongoDB + Redis Locations
 `node populate.js file.csv linesToProcess rateCount redisPort [DROP]`
 
 Where 
@@ -46,3 +46,22 @@ Where
 - `lat` is the latitude where the new user is, `lon` is the longitude where the new user is. If only one or none of them are provided, defaults to ITBA's coordinates
 
 Eg: `node newUser.js 6379 jtallar 'Jota Te' 'Calle Falsa' '1998-02-15' M`
+
+# MongoDB Analytics
+`node analytics.js option-name [option-params]`
+
+Where
+- `option-name` is an available option
+- `option-params` are parameters needed for the option
+
+Available options are the following
+* `top [n]` shows the best n users according to their rating. Eg: `node analytics.js top 3`.
+* `bottom [n]` shows the worst n users according to their rating. Eg: `node analytics.js bottom 3`.
+* `info [id]` shows all available information from the user with that id. Eg: `node analytics.js info jet6`.
+* `top-activity [n]` shows the n most rated people, regardless of the score. Eg: `node analytics.js top-activity 3`.
+* `avg-activity` shows the average number of ratings made to each person. Eg: `node analytics.js avg-activity`.
+* `interactions-per-hour [YYYY-MM-DD]` shows the average interactions made each hour on day \[YYYY-MM-DD\]. Eg: `node analytics.js interactions-per-hour '2020-11-24'`.
+* `top-days [n]` shows the n days when people made the most ratings. Eg: `node analytics.js top-days 1`.
+* `geo-count-within [lat, lon, radius]` shows the number of ratings made in a spherical radius (in meters) around [lat, lon]. Eg: `node analytics.js geo-count-within 22 -21 1000000`.
+
+Every top/bottom is sorted by id when the number matches.
