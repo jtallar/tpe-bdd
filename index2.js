@@ -1,7 +1,7 @@
 const redis= require("redis");
 const redisFun = require('./utils/redisQueries');
 
-const redisClient = redis.createClient(6377);
+const redisClient = redis.createClient(6379);
 
 async function runRedis(queryFunction, ...params) {
     try {
