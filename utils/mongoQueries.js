@@ -39,13 +39,15 @@ exports.insertOneUser = async function (collection, user) {
     const exists = await exports.checkUserIdExists(collection, user._id);
     if (exists) {
         console.log("ERROR, _id " + user._id + " already exists");
-        return;
+        return false;
     }
     const result = await collection.insertOne(user);
     if (result.result.ok) {
         console.log("OK, inserted");
+        return true;
     } else {
         console.log("ERROR, not inserted");
+        return false;
     }
 }
 
