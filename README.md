@@ -32,3 +32,17 @@ Where
 - `lat` is the latitude where the rating is made, `lon` is the longitude where the rating is made. If only one or none of them are provided, defaults to ITBA's coordinates
 
 Eg: `node ratePerson.js 4 wonderful8 mountain9 -21.21 22.22`
+
+# New User
+`node newUser.js redisPort id name address YYYY-MM-DD gender [lat lon]`
+
+Where
+- `redisPort` is a number (> 0) that indicates the port where redis locations is running
+- `id` is a string with the new user's id, that cannot exist
+- `name` is a string with the name of the new user
+- `address` is a string with the address of the new user
+- `YYYY-MM-DD` is the date of birth of the new user in that format
+- `gender` is a string with the gender of the new user
+- `lat` is the latitude where the new user is, `lon` is the longitude where the new user is. If only one or none of them are provided, defaults to ITBA's coordinates
+
+Eg: `node newUser.js 6379 jtallar 'Jota Te' 'Calle Falsa' '1998-02-15' M`
