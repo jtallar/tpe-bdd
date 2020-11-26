@@ -68,13 +68,11 @@ async function populateMongo(users, shouldDrop, rateCount, point, radius) {
         // Insert users into collection
         var i;
         
-        // for (i = 0; i < users.length / 100000; i++) {
-        //     var chunk = users.slice(i * 100000, (i + 1) * 100000);
-        //     await mongoFun.insertManyUsers(collection, chunk);
-        //     console.log('Inserted 100.000 in MongoDB');
-        // }
-
-        await mongoFun.insertManyUsers(collection, users);
+        for (i = 0; i < users.length / 100000; i++) {
+            var chunk = users.slice(i * 100000, (i + 1) * 100000);
+            var ret = await mongoFun.insertManyUsers(collection, chunk);
+            console.log('Inserted ' + ret + ' in MongoDB');
+        }
 
         // Generate rateCount random ratings
         for (i = 0; i < rateCount; i++) {
@@ -87,6 +85,7 @@ async function populateMongo(users, shouldDrop, rateCount, point, radius) {
             var rating = objectFun.newRatingJson(score, users[index0]._id, users[index1]._id, randomPoint.latitude, randomPoint.longitude);
             await mongoFun.rateUser(collection, rating);
         }
+        console.log('Inserted ' + rateCount + ' rates');
 
     } finally {
         // Ensures that the client will close when you finish/error
@@ -156,8 +155,8 @@ var stream = fs.createReadStream(csvFilename);
             name = data['Name'],
             genre = data['Sex'];
         
-            var userJson = objectFun.newUserJson(randomWords(1) + processedLines, name, 'Calle Falsa ' + processedLines,
-            new Date(year + '-01-15T00:00'), genre, "link.to.image");
+            var userJson = objectFun.newUserJson(randomWords(1) + processedLines + '-' + utilsFun.randomBetween(0, 10), name, 
+            'Calle Falsa ' + processedLines, new Date(year + '-01-15T00:00'), genre, "link.to.image");
             users.push(userJson);
 
             trackLineCount();
