@@ -13,7 +13,8 @@ async function rateInMongo(rating) {
         const database = mClient.db('nosedive');
         const collection = database.collection('users');
 
-        await mongoFun.rateUser(collection, rating);
+        const ret = await mongoFun.rateUser(collection, rating);
+        console.log('Rated user? ' + ret);
     } finally {
         // Ensures that the client will close when you finish/error
         await mClient.close();

@@ -56,8 +56,8 @@ exports.insertManyUsers = async function (collection, users) {
     const exists = await exports.findManyUsersById(collection, ids, { _id: 1 });
     // TODO: En vez de fallar, eliminar de users los repetidos
     if (exists.length != 0) {
-        console.log("ERROR, the following ids already exist: " + JSON.stringify(exists));
-        return;
+        console.log("The following ids already exist: " + JSON.stringify(exists));
+        users = users.filter( (el) => !exists.some(r => r._id === el._id));
     }
 
     const result = await collection.insertMany(users);
@@ -66,6 +66,7 @@ exports.insertManyUsers = async function (collection, users) {
     } else {
         console.log("ERROR, only inserted " + JSON.stringify(result.insertedIds));
     }
+    return users.length;
 }
 
 exports.countAll = async function (collection) {
@@ -76,14 +77,14 @@ exports.countAll = async function (collection) {
 exports.rateUser = async function (collection, ratingJson) {
     if(ratingJson.from == ratingJson.to) {
         console.log("ERROR, cannot rate yourself");
-        return;
+        return false;
     }
 
     var fromUser = await exports.findUserById(collection, ratingJson.from, {_id:1, rating: 1});
     var toUser = await exports.findUserById(collection, ratingJson.to, {_id:1, rating: 1});
     if (!fromUser || !toUser) {
         console.log("ERROR, one of the users does not exist");
-        return;
+        return false;
     }
     delete ratingJson.to;
     
@@ -91,8 +92,10 @@ exports.rateUser = async function (collection, ratingJson) {
     const result = await collection.updateOne({ _id: toUser._id }, { $push: { ratings: ratingJson }, $set : { rating: newRating} });
     if (result.result.ok) {
         // console.log("OK, rated");
+        return true;
     } else {
         console.log("ERROR, not rated");
+        return false;
     }
 }
 
