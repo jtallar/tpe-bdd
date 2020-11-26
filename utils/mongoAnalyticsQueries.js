@@ -4,6 +4,7 @@ exports.bestUsers = async function (collection, n) {
         { $limit : n },
         { $project: { _id: 1, name: 1, rating: 1} }
     ]).toArray();
+    if(result) console.log('\n👑 TOP '+ n + ' 👑\n')
     return result;
 }
 
@@ -13,6 +14,7 @@ exports.worstUsers = async function (collection, n) {
         { $limit : n },
         { $project: { _id: 1, name: 1, rating: 1} }
     ]).toArray();
+    if(result) console.log('\n😞 WORST '+ n + ' 😞\n')
     return result;
 }
 
@@ -22,6 +24,7 @@ exports.topActivity = async function (collection, n) {
         { $sort : { ratingCount: -1, _id: 1} }, 
         { $limit : n },
     ]).toArray();
+    if(result) console.log('\n🔥 TOP-ACTIVITY '+ n + ' 🔥\n')
     return result;
 }
 
@@ -30,6 +33,7 @@ exports.avgActivity = async function (collection) {
         { $project: { _id: 1, ratingCount: { $size: "$ratings" }}},
         { $group: { _id: "Activity per Person", avgRating: { $avg : "$ratingCount" } } }
     ]).toArray();
+    if(result) console.log('\n\t     🔥  🔥  🔥\n')
     return result;
 }
 
@@ -57,6 +61,7 @@ exports.interactionsPerHour = async function (collection, date) {
         { $group: { _id: "Total Interactions per hour that day", totalInter: { $sum : "$ratingCount" } } },
         { $project: { _id: 1, interPerHour: { $divide : ["$totalInter", 24] } } },
     ]).toArray();
+    if(result) console.log('\n🕘 Interaction per hour 🕘\n')
     return result;
 }
 
@@ -69,6 +74,7 @@ exports.topDays = async function (collection, n) {
         { $sort : { cant: -1, _id: 1 } }, 
         { $limit : n },
     ]).toArray();
+    if(result) console.log('\n📌 TOP '+ n + ' days 📌\n')
     return result;
 }
 
@@ -81,5 +87,6 @@ exports.countWithinRadius = async function (collection, lat, lon, radius) {
         { $match : { location: { $geoWithin: { $centerSphere: [ [lat, lon], radius / 6371000] } } } },
         { $group: { _id: "Count Within Radius", cant: { $sum : 1 } } },
     ]).toArray();
+    if(result) console.log('\n 🌎  GEO Count in '+lat+' '+lon+'  🌎\n')
     return result;
 }

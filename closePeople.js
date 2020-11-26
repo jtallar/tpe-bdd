@@ -89,7 +89,7 @@ const redisCache = redis.createClient(cachePort);   // 6379
 async function getCloseIds(id, radius){
     var close = await geoRadiusRedis(id, radius);
     if(close){
-        console.log('Close people ->  ' +close)
+        console.log('Close people ⟿    ' +close)
         await fillCacheRedis(await findUsersMongo(close))
     }
     else console.log(' ❗️ No user named '+id)

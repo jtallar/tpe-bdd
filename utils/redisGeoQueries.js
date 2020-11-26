@@ -2,7 +2,8 @@ exports.geoAddOne = async function (client, key, long, lat, id) {
     const result = client.geoadd(key, long, lat, id, (err, value) => {
         // console.log(value + ' inserted');
     });
-    return result;
+    if(!result) return 1;
+    return 0
 }
 // runRedis(redisFun.geoAdd, "people", 10.999216, 45.4432923, "cvuoso");
 

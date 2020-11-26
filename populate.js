@@ -26,7 +26,7 @@ async function populateRedis(users, flush, point, radius) {
         .on('error', function(error) {
             console.error(`❗️ Redis Error: ${error}`)})   
         .on('ready', function() {
-            console.log('✅ Redis ready!')
+            console.log('Redis ✅')
         })
 
         // Drop all geo if requested
@@ -40,12 +40,13 @@ async function populateRedis(users, flush, point, radius) {
                 console.log('Nothing to drop');
             }
         }
-
+        var inserted = 0;
         // Insert users into geo
         for (var i = 0; i < users.length; i++) {
             const randomPoint = randomLocation.randomCirclePoint(point, radius);
-            await redisFun.geoAddOne(redisClient, "people", randomPoint.longitude, randomPoint.latitude, users[i]._id);
+            inserted += await redisFun.geoAddOne(redisClient, "people", randomPoint.longitude, randomPoint.latitude, users[i]._id);
         }
+        console.log('Inserted ' + inserted + ' in GeoRedis')
     } finally {
         redisClient.quit();     // Ensures that the client will close when you finish/error
     }
@@ -86,6 +87,7 @@ async function populateMongo(users, shouldDrop, rateCount, point, radius) {
             await mongoFun.rateUser(collection, rating);
         }
         console.log('Inserted ' + rateCount + ' rates');
+        console.log('MongoDB ✅')
 
     } finally {
         // Ensures that the client will close when you finish/error
@@ -165,6 +167,7 @@ var stream = fs.createReadStream(csvFilename);
         }
     })
     .on('unpipe', function() { // Uso unpipe porque cubre ambos casos (por fin de archivo y por limite maxLines)
+        console.log('\n    ⌛   ...   ⌛    \n');
         console.log(`Total lines processed: ${processedLines}`);
 
         // Connect to MongoDB and insert users in MongoDB
