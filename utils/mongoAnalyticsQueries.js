@@ -84,7 +84,7 @@ exports.countWithinRadius = async function (collection, lat, lon, radius) {
         { $project: { _id: 1, ratings: { location: 1 }}},
         { $unwind: "$ratings" },
         { $project: { _id: 1, location: "$ratings.location" }},
-        { $match : { location: { $geoWithin: { $centerSphere: [ [lat, lon], radius / 6371000] } } } },
+        { $match : { location: { $geoWithin: { $centerSphere: [ [lon, lat], radius / 6371] } } } },
         { $group: { _id: "Count Within Radius", cant: { $sum : 1 } } },
     ]).toArray();
     if(result) console.log('\n 🌎  GEO Count in '+lat+' '+lon+'  🌎\n')

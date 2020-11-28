@@ -25,7 +25,7 @@ async function runQuery(queryFunction, ...params) {
 var myArgs = process.argv.slice(2); // Elimino node y fileName
 if (myArgs.length < 1) {
     console.log('Please run with `node analytics.js option-name [option-params]`');
-    console.log('Available option-name\'s are: \n* `top [n]` shows the best n users according to their rating.\n* `bottom [n]` shows the worst n users according to their rating.\n* `info [id]` shows all available information from the user with that id.\n* `top-activity [n]` shows the n most rated people, regardless of the score.\n* `avg-activity` shows the average number of ratings made to each person.\n* `interactions-per-hour [YYYY-MM-DD]` shows the average interactions made each hour on day \[YYYY-MM-DD\].\n* `top-days [n]` shows the n days when people made the most ratings.\n* `geo-count-within [lat, lon, radius]` shows the number of ratings made in a spherical radius (in meters) around [lat, lon].\n');
+    console.log('Available option-name\'s are: \n* `top [n]` shows the best n users according to their rating.\n* `bottom [n]` shows the worst n users according to their rating.\n* `info [id]` shows all available information from the user with that id.\n* `top-activity [n]` shows the n most rated people, regardless of the score.\n* `avg-activity` shows the average number of ratings made to each person.\n* `interactions-per-hour [YYYY-MM-DD]` shows the average interactions made each hour on day \[YYYY-MM-DD\].\n* `top-days [n]` shows the n days when people made the most ratings.\n* `geo-count-within [lat, lon, radius]` shows the number of ratings made in a spherical radius (in kilometers) around [lat, lon].\n');
     return;
 }
 
@@ -94,6 +94,6 @@ switch(option) {
         break;
     default:
         console.log('Please run with `node analytics.js option-name [option-params]`');
-        console.log('Available option-name\'s are: \n* `top [n]` shows the best n users according to their rating.\n* `bottom [n]` shows the worst n users according to their rating.\n* `info [id]` shows all available information from the user with that id.\n* `top-activity [n]` shows the n most rated people, regardless of the score.\n* `avg-activity` shows the average number of ratings made to each person.\n* `interactions-per-hour [YYYY-MM-DD]` shows the average interactions made each hour on day \[YYYY-MM-DD\].\n* `top-days [n]` shows the n days when people made the most ratings.\n* `geo-count-within [lat, lon, radius]` shows the number of ratings made in a spherical radius (in meters) around [lat, lon].\n');
+        console.log('Available option-name\'s are: \n* `top [n]` shows the best n users according to their rating.\n* `bottom [n]` shows the worst n users according to their rating.\n* `info [id]` shows all available information from the user with that id.\n* `top-activity [n]` shows the n most rated people, regardless of the score.\n* `avg-activity` shows the average number of ratings made to each person.\n* `interactions-per-hour [YYYY-MM-DD]` shows the average interactions made each hour on day \[YYYY-MM-DD\].\n* `top-days [n]` shows the n days when people made the most ratings.\n* `geo-count-within [lat, lon, radius]` shows the number of ratings made in a spherical radius (in kilometers) around [lat, lon].\n');
         return;
 }

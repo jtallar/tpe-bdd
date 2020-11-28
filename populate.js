@@ -46,7 +46,7 @@ async function populateRedis(users, flush, point, radius) {
             const randomPoint = randomLocation.randomCirclePoint(point, radius);
             inserted += await redisFun.geoAddOne(redisClient, "people", randomPoint.longitude, randomPoint.latitude, users[i]._id);
         }
-        console.log('Inserted ' + inserted + ' in GeoRedis')
+        console.log('Inserted in GeoRedis')
     } finally {
         redisClient.quit();     // Ensures that the client will close when you finish/error
     }

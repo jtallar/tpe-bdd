@@ -91,6 +91,6 @@ Available options are the following
 * `avg-activity` shows the average number of ratings made to each person. Eg: `node analytics.js avg-activity`.
 * `interactions-per-hour [YYYY-MM-DD]` shows the average interactions made each hour on day \[YYYY-MM-DD\]. Eg: `node analytics.js interactions-per-hour '2020-11-24'`.
 * `top-days [n]` shows the n days when people made the most ratings. Eg: `node analytics.js top-days 1`.
-* `geo-count-within [lat, lon, radius]` shows the number of ratings made in a spherical radius (in meters) around [lat, lon]. Eg: `node analytics.js geo-count-within 22 -21 1000000`.
+* `geo-count-within [lat, lon, radius]` shows the number of ratings made in a spherical radius (in kilometers) around [lat, lon]. Eg: `node analytics.js geo-count-within 22 -21 1000000`.
 
 Every top/bottom is sorted by id when the number matches.

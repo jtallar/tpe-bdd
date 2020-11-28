@@ -75,7 +75,7 @@ if (isNaN(userBirth)) {
 
 var lat = parseFloat(myArgs[6]), lon  = parseFloat(myArgs[7]);
 if (isNaN(lat) || isNaN(lon)) {
-    console.log('No correct coordinates provided, defaulting to ITBA');
+    console.log('No correct coordinates provided, defaulting to ITBA Madero');
     lat = -34.60252364016448;
     lon = -58.36740569629624;
 }
